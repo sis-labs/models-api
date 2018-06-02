@@ -1,0 +1,40 @@
+{
+  "name": "model-explorer-api",
+  "version": "1.0.0",
+  "description": "simple api for model exploration at gm",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "start-dev": "nodemon index.js",
+    "test": "mocha"
+  },
+  "keywords": [
+    "api",
+    "explorer",
+    "gm"
+  ],
+  "author": "mlefebvre@groupemutuel.ch",
+  "license": "MIT",
+  "dependencies": {
+    "bunyan": "^1.8.12",
+    "jsonwebtoken": "^8.2.1",
+    "moment": "^2.22.1",
+    "mongoose": "^5.1.2",
+    "request": "^2.87.0",
+    "restify": "^7.2.0",
+    "restify-errors": "^6.0.0",
+    "restify-mongoose": "^3.0.0",
+    "restify-oauth2": "^4.0.4",
+    "rxjs": "^6.2.0",
+    "sequelize": "^4.37.10",
+    "uuid": "^3.2.1"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "dirty-chai": "^2.0.1",
+    "istanbul": "^0.4.5",
+    "mocha": "^5.2.0",
+    "nodemon": "^1.17.5",
+    "sinon": "^5.0.10"
+  }
+}
