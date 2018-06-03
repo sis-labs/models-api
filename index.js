@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken');
 const appName = 'modelsApi';
 const appId = 'models-api';
 const {version: appVersion} = require('./package.json');
+const jwtSecret = 'ce0d86934ee9585417502bcee777e832c461241811355934079e24253b1cd1e5';
 
 function requestSerializer(req) {
   const origin = req.header('host');
@@ -27,7 +28,6 @@ function requestSerializer(req) {
 }
 
 function contextSerializer(ctx) {
-  const secret = 'your-256-bit-secret';
   const {authorization} = ctx;
   const token = jwt.decode(authorization);
   const {user, holding, appId, client_id:clientId, client_secret: clientSecret} = jwt.payload;
@@ -117,9 +117,20 @@ function marshalRequest(req) {
 
 server.on('pre', (req, res) => {
   req.log.info({req}, 'Handling a new request');
-  const { url, method } = req;
-  if (method !== 'OPTIONS') {
-    fillCorsHeaders(req, res);
+  const authorization = req.header('authorization');
+  const token = authorization.split(" ")[1];
+  try {
+    req.log.info({req}, 'Trying to verify the jwt token');
+    jwt.verify(token, jwtSecret);
+    req.log.info({req}, 'The token has been succesfully verified');
+    const {jwtHeader, jwtPayload} = jwt.decode(token, {complete : true});
+    const { url, method } = req;
+    if (method !== 'OPTIONS') {
+      fillCorsHeaders(req, res);
+    }
+  } catch(err) {
+    req.log.error({req}, 'Unable to verify the token [' + (err.message || err) + ']');
+    res.send(401, {code: 02, message: 'invalid token'}, {'x-request-id': req.id(), 'x-response-time': moment().valueOf() - req.time()});
   }
 });
 
